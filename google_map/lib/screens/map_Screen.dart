@@ -18,8 +18,9 @@ class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _mapController =
       Completer<GoogleMapController>();
 
-  static const LatLng _pGooglePlex = LatLng(8.587364, 81.215210);
-  static const LatLng _pApplePark = LatLng(8.363852, 81.008183);
+  static const LatLng _pGooglePlex =
+      LatLng(8.588124685190367, 81.21451944318245);
+  static const LatLng _pApplePark = LatLng(8.361463777045701, 80.9905074784531);
 
   LatLng? currentP;
   Map<PolylineId, Polyline> polylines = {};
@@ -68,7 +69,8 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> cameraToPosition(LatLng pos) async {
     final GoogleMapController controller = await _mapController.future;
-    CameraPosition newCameraPosition = CameraPosition(target: pos, zoom: 13);
+   CameraPosition newCameraPosition = CameraPosition(target: pos, zoom: 13);
+
     await controller
         .animateCamera(CameraUpdate.newCameraPosition(newCameraPosition));
   }
@@ -108,10 +110,11 @@ class _MapScreenState extends State<MapScreen> {
     List<LatLng> polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        GOOGLE_MAP_API_KEY,
-        PointLatLng(_pGooglePlex.latitude, _pGooglePlex.latitude),
-        PointLatLng(_pApplePark.latitude, _pApplePark.latitude),
-        travelMode: TravelMode.driving);
+    GOOGLE_MAP_API_KEY,
+    PointLatLng(_pGooglePlex.latitude, _pGooglePlex.longitude), // Fix latitude and longitude
+    PointLatLng(_pApplePark.latitude, _pApplePark.longitude),   // Fix latitude and longitude
+    travelMode: TravelMode.driving);
+
     if (result.points.isNotEmpty) {
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.latitude));
